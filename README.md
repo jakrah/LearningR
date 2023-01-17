@@ -1,5 +1,3 @@
-ticktock
-
 Jakaria Rahman
 
 This is a test of github push.

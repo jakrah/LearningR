@@ -1,8 +1,3 @@
-#Here's an example of a conflict.
-
-Jakaria Rahman
-
-
 10
 
 # R basics ----------------------------------------------------------------
@@ -19,4 +14,30 @@ summary(airquality)
 library(tidyverse)
 r3::check_git_config()
 
-#This will be used for testing out Git
+library(NHANES)
+
+
+# Looking at data --------------------------------------------------------
+library(tidyverse)
+library(NHANES)
+glimpse(NHANES)
+select(NHANES, age)
+select(NHANES, Age, Weight, BMI)
+colnames(NHANES)
+select(NHANES, -HeadCirc)
+select(NHANES, starts_with("BP"))
+select(NHANES, ends_with("day"))
+select(NHANES, contains("Age"))
+
+nhanes_small <- select(
+  NHANES,
+  Age,
+  Gender,
+  BMI,
+  Diabetes,
+  PhysActive,
+  BPSysAve,
+  BPDiaAve,
+  Education
+)
+nhanes_small
