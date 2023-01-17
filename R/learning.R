@@ -106,4 +106,32 @@ nhanes_update <- nhanes_small %>%
                          "old",
                          "young"))
 
+# Exercise: Piping, filtering, and mutating -------------------------------
+
+nhanes_small %>%
+    filter(bmi >= 20 & 50,
+           diabetes == "YES")
+
+mean_arterial_pressure <-
+    mutate(
+        (2 * bd_dia_ave) + bp_sys_ave)/3))
+
+nhanes_small %>%
+    summarise(max_bmi = max(bmi, na.rm = TRUE))
+nhanes_small %>%
+    summarise(max_bmi = max(bmi, na.rm = TRUE),
+              min_bmi = min(bmi, na.rm = TRUE))
+
+# Summarising -------------------------------------------------------------
+
+nhanes_small %>%
+    summarize (
+        max_bmi = max (bmi))
+
+nhanes_small %>%
+    filter (!is.na(diabetes))  %>%
+group_by (diabetes) %>%
+    summarize (
+        max_bmi = max (bmi, na.rm = TRUE),
+        min_bmi = min (bmi, na.rm = TRUE))
 
