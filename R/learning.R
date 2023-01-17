@@ -41,3 +41,21 @@ nhanes_small <- select(
   Education
 )
 nhanes_small
+
+# Fixing variable names ---------------------------------------------------
+
+nhanes_small <- rename_with(
+    nhanes_small,
+    snakecase::to_snake_case
+)
+
+# Piping ------------------------------------------------------------------
+colnames(nhanes_small)
+nhanes_small %>%
+    colnames()
+
+nhanes_small %>%
+    select(phys_active) %>%
+    rename (
+        Physically_active = phys_active
+    )
