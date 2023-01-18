@@ -4,3 +4,190 @@ author: "Jakaria Rahman"
 format: html
 ---
 
+# Intro
+This paper **aim** to describe learning r.
+
+# Methods and Results
+The method focused on *quantitative* analysis.
+
+# Analysis
+The analysis section included nothing
+
+```{r setup}
+#| include: false
+library(tidyverse)
+nhanes_small <- read_csv(here::here("data/nhanes_small.csv"))
+```
+
+## Table of resut
+```{r eman-age-bmi-table}
+#| echo: false
+#| warning: false
+#| message: false
+nhanes_small %>%
+    filter (!is.na(diabetes))  %>%
+group_by (diabetes,
+phys_active) %>%
+    summarize (
+        max_bmi = max (bmi, na.rm = TRUE),
+        min_bmi = min (bmi, na.rm = TRUE)
+        ) %>% ungroup () %>%
+        knitr::kable(caption = "Mean Value of Age and bmi for each diabtes and physical activity status")
+```
+## Table 
+``` {r table_of_result}
+nhanes_small %>%
+  filter(!is.na(diabetes)) %>%
+  group_by(diabetes, education) %>%
+  summarise(
+    mean_age = mean(age, na.rm = TRUE),
+    mean_bmi = mean(bmi, na.rm = TRUE)
+  ) %>%
+  ungroup() %>%
+  # 2. Round the means to 1 digit and
+  # modify the `education` column so that male and female get capitalized.
+  mutate(
+    mean_age = round(mean_age, 1),
+    mean_bmi = round(mean_bmi, 1),
+    education = str_to_sentence(education)
+  ) %>%
+  # 3. Rename `diabetes` to `"Diabetes Status"` and `education` to `Education`
+  rename(
+    "Diabetes Status" = diabetes, 
+    "Education" = education,
+    "Mean Age" = mean_age, 
+    "Mean BMI" = mean_bmi
+  ) %>%
+  knitr::kable(caption = "Mean values of Age and BMI for each education and diabetes status.")
+```
+
+## Inserting images
+![Cute covid cat] (images/cat.jpeg) {#fig-cat}
+
+
+## Visualizing data
+### One variable plots
+``` {r}
+ggplot(nhanes_small, aes(x = bmi)) + 
+    geom_histogram(na.rm = TRUE)
+```
+``` {r}
+#| fig-cap: "Distribution of BMI."
+#| label: fig-bmi-histo
+nhanes_small %>%
+ filter(bmi <= 60) %>%
+ggplot(aes(x = bmi)) + 
+    geom_histogram(na.rm = TRUE)
+```
+
+See @fig-bmi-histo
+
+## DIscrete variable
+
+``` {r}
+nhanes_small %>%
+   ggplot(aes(x = education)) +
+    geom_bar()
+```
+```{r}
+#| label: fig-diabetes-education
+#| fig-cap: "Count of diabets and education."
+#| fug-subcap:
+#|   - "Diabetes"
+#|   - "Education"
+#| layout-ncol: 2
+nhanes_small %>%
+    filter(!is.na(diabetes)) %>%
+    ggplot(aes(x = diabetes)) +
+    geom_bar()
+           
+nhanes_small %>%
+    filter(!is.na(education)) %>%
+    ggplot(aes(x = education)) +
+    geom_bar()
+
+
+```
+
+
+## Plotting two variables
+### Plotting two continuous
+```{r}
+nhanes_small %>%
+    ggplot(aes(x = bmi, y = bp_sys_ave)) +
+    geom_hex(na.ram = TRUE) +
+    geom_smooth(na.rm = TRUE)
+```
+
+### Two discrete variables
+```{r}
+nhanes_small %>%
+    filter(!is.na(education), !is.na(diabetes))%>%
+    ggplot(aes(x = diabetes, fill = education)) +
+    geom_bar(position = position_dodge())
+    
+```
+### Discreter and countinous variable
+```{r}
+nhanes_small %>%
+    filter(!is.na(diabetes), bmi <= 60) %>%
+    ggplot(aes(x = diabetes, y = bmi)) +
+    geom_violin(na.rm = TRUE) +
+    geom_boxplot(na.rm = TRUE, width = 0.1)
+```
+
+## Exercise to make plots with one or two variables
+```{r}
+library(NHANES)
+nhanes_exercise <- NHANES %>%
+  rename_with(snakecase::to_snake_case) %>%
+  rename(sex = gender)
+
+```
+
+
+```{r solution-distribution-ages}
+#| eval: false
+# These are approximate caption titles
+#| label: fig-distribution-ages
+#| fig-cap: "Distribution of different age variables"
+#| layout-ncol: 2
+#| fig-subcap:
+#|   - "Age at collection"
+#|   - "Age of diabetes diagnosis"
+# Distribution of age
+ggplot(nhanes_exercise, aes(x = age)) +
+  geom_density(na.rm = TRUE)
+
+# Distribution of age at diabetes diagnosis
+ggplot(nhanes_exercise, aes(x = diabetes_age)) +
+  geom_density(na.rm = TRUE)
+```
+
+```{r}
+# Number of people who smoke now and are or above 20 years of age,
+# removing those with missing smoking status.
+nhanes_exercise %>%
+  filter(age >= 20, !is.na(smoke_now)) %>%
+  ggplot(aes(x = smoke_now)) +
+  geom_bar()
+```
+
+
+```{r}
+# BMI in relation to mean arterial pressure
+nhanes_exercise %>%
+  mutate(mean_arterial_pressure = (bp_sys_ave + (2 * bp_dia_ave)) / 3) %>%
+  ggplot(aes(x = bmi, y = mean_arterial_pressure)) +
+  geom_hex(na.rm = TRUE) +
+  geom_smooth()
+```
+
+
+
+
+
+
+
+
+
