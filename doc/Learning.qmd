@@ -147,7 +147,7 @@ nhanes_exercise <- NHANES %>%
 
 
 ```{r solution-distribution-ages}
-#| eval: false
+#| eval: True
 # These are approximate caption titles
 #| label: fig-distribution-ages
 #| fig-cap: "Distribution of different age variables"
